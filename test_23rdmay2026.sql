@@ -7,13 +7,11 @@ dept_name VARCHAR(50) NOT NULL,
 location VARCHAR(50)
 );
 
-
 INSERT INTO Departments (dept_id, dept_name, location) VALUES
 (10, 'Finance', 'New York'),
 (20, 'IT', 'San Francisco'),
 (30, 'Sales', 'Chicago'),
 (40, 'Marketing', 'Los Angeles');
-
 
 -- Create Jobs Table
 CREATE TABLE Jobs (
@@ -29,9 +27,6 @@ INSERT INTO Jobs (job_id, job_title, min_salary, max_salary) VALUES
 (3, 'Analyst', 50000.00, 90000.00),
 (4, 'Intern', 30000.00, 45000.00);
 
-
-
-
 -- Create Employees Table
 CREATE TABLE Employees (
 emp_id INT PRIMARY KEY,
@@ -44,7 +39,6 @@ hire_date DATE,
 FOREIGN KEY (dept_id) REFERENCES Departments(dept_id),
 FOREIGN KEY (job_id) REFERENCES Jobs(job_id)
 );
-
 
 INSERT INTO Employees (emp_id, name, manager_id, dept_id, job_id, salary, hire_date) VALUES
 -- Top Level Manager
