@@ -1,0 +1,468 @@
+GREATER OPERATOR
+------------------------------------------------------------------------------------------------------------------------------
+The $gte is a comparison query operator that allows you to select documents where a value of a field is greater than or equal to ( i.e. >=) a specified value.
+The $gte operator has the following syntax:
+{field: {$gte: value} }
+
+MongDB $gte operator examples
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+Code language: JavaScript (javascript)
+----------------------------------------------------------------------------------------------------------------------------
+1) Using $gte operator to select documents where a field is greater than or equal to a specified value
+ price is greater than 799:
+db.products.find({
+    price: {
+        $gte: 799
+    }
+}, {
+    name: 1,
+    price: 1
+})
+
+OUTPUT:
+
+  _id: 1,
+  name: 'xPhone',
+  price: 799
+}
+
+  _id: 2,
+  name: 'xTablet',
+  price: 899
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  price: 899
+}
+--------------------------------------------------------------------------------------------------------------
+2) Using the $gte operator to check if a field in an embedded document is greater than or equal to a value
+ greater than or equal to 9.5:
+db.products.find({
+    "spec.screen": {
+        $gte: 9.5
+    }
+}, {
+    name: 1,
+    "spec.screen": 1
+})
+Code language: PHP (php)
+OUTPUT:
+
+  _id: 2,
+  name: 'xTablet',
+  spec: {
+    screen: 9.5
+  }
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  spec: {
+    screen: 9.7
+  }
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  spec: {
+    screen: 9.7
+  }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------
+3) Using the $gte operator to check if an array element is greater than or equal to a value
+t greater than or equal to 512:
+db.products.find({
+    storage: {
+        $gte: 512
+    }
+}, {
+    name: 1,
+    storage: 1
+})
+
+OUTPUT:
+{
+  _id: 2,
+  name: 'xTablet',
+  storage: [
+    128,
+    256,
+    512
+  ]
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  storage: [
+    128,
+    256,
+    1024
+  ]
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------
+4) Using the $gte operator to check if a field is after or on the same date
+ release date is after or on 2020-05-14:
+db.products.find({
+    "releaseDate": {
+        $gte: new ISODate('2020-05-14')
+    }
+}, {
+    name: 1,
+    releaseDate: 1
+});
+Code language: PHP (php)
+The query returned the following documents:
+[
+  {
+    _id: 4,
+    name: 'SmartPad',
+    releaseDate: ISODate("2020-05-14T00:00:00.000Z")
+  },
+  {
+    _id: 5,
+    name: 'SmartPhone',
+    releaseDate: ISODate("2022-09-14T00:00:00.000Z")
+  }
+]
+--------------------------------------------------------------------------------------------------------------
+db.products.drop()
+-------------------------------------------------------------------------------------------------------
+
+
+NOT EQUAL OPERATOR
+---------------------------------------------------------------------------------------------------------------------------
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+,
+    { "_id" : 6, "name" : "xWidget", "spec" : { "ram" : 64, "screen" : 9.7, "cpu" : 3.66 },"color":["black"],"storage":[1024]}
+ ])
+
+1.NE 899
+db.products.find({
+    price: {
+        $ne: 899
+    }
+}, {
+    name: 1,
+    price: 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  price: 799
+}
+OUTPUT:
+{
+  _id: 1,
+  name: 'xPhone',
+  price: 799
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  price: 699
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  price: 599
+}
+
+  _id: 6,
+  name: 'xWidget'
+}
+-------------------------------------------------------------------------------------------------------------
+2.NE :9.7
+db.products.find({
+    "spec.screen": {
+        $ne: 9.7
+    }
+}, {
+    name: 1,
+    "spec.screen": 1
+})
+OUTPUT:
+{
+  _id: 1,
+  name: 'xPhone',
+  spec: {
+    screen: 6.5
+  }
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  spec: {
+    screen: 9.5
+  }
+}
+----------------------------------------------------------------------------------------------------------------------
+db.products.find({
+    storage: {
+        $ne: 128
+    }
+}, {
+    name: 1,
+    storage: 1
+})
+{
+  _id: 6,
+  name: 'xWidget',
+  storage: [
+    1024
+  ]
+}
+-------------------------------------------------------------------------------------------------------------------------\
+db.products.find({
+    releaseDate: {
+        $ne: new ISODate('2015-01-14')
+    }
+}, {
+    name: 1,
+    releaseDate: 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  releaseDate: 2011-05-14T00:00:00.000Z
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  releaseDate: 2011-09-01T00:00:00.000Z
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  releaseDate: 2020-05-14T00:00:00.000Z
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  releaseDate: 2022-09-14T00:00:00.000Z
+}
+{
+  _id: 6,
+  name: 'xWidget'
+}
+------------------------------------------------------------------------------------------------------------
+db.products.drop()
+true
+------------------------------------------------------------------------------------------------------------
+3. IN OPERATOR
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+------------------------------------------------------------------------------------------
+db.products.find({
+    price: {
+        $in: [699, 799]
+    }
+}, {
+    name: 1,
+    price: 1
+})
+OUTPUT:
+{
+  _id: 1,
+  name: 'xPhone',
+  price: 799
+}
+
+  _id: 4,
+  name: 'SmartPad',
+  price: 699
+}
+-------------------------------------------------------------------------------------------------
+db.products.find({
+    color: {
+        $in: ["black", "white"]
+    }
+}, {
+    name: 1,
+    color: 1
+})
+OUTPUT:
+
+{
+  _id: 1,
+  name: 'xPhone',
+  color: [
+    'white',
+    'black'
+  ]
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  color: [
+    'white',
+    'black',
+    'purple'
+  ]
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  color: [
+    'white',
+    'orange',
+    'gold',
+    'gray'
+  ]
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  color: [
+    'white',
+    'orange',
+    'gold',
+    'gray'
+  ]
+}
+----------------------------------------------------------------------------------------------------------
+db.products.find({
+    color: {
+        $in: [/^g+/, /^w+/]
+    }
+}, {
+    name: 1,
+    color: 1
+})
+OUTPUT:
+{
+  _id: 1,
+  name: 'xPhone',
+  color: [
+    'white',
+    'black'
+  ]
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  color: [
+    'white',
+    'black',
+    'purple'
+  ]
+}
+{
+  _id: 4,
+  name: 'SmartPad',
+  color: [
+    'white',
+    'orange',
+    'gold',
+    'gray'
+  ]
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  color: [
+    'white',
+    'orange',
+    'gold',
+    'gray'
+  ]
+}
+-------------------------------------------------------------------------------------------------------------
+
+The $nin is a query comparison operator that allows you to find documents where:
+the value of the field is not equal to any value in an array
+or the field does not exist.
+Here is the syntax of the $nin operator:
+{ field: { $nin: [ <value1>, <value2> ...]} }
+-------------------------------------------------------------------------------------------------
+Code language: CSS (css)
+Like the $in operator, the value list (<value1>, <value2>,…) can be a list of literal values or regular expressions.
+MongoDB $nin operator examples
+We’ll use this products collections:
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+-------------------------------------------------------------------------------------------------------------
+1) Using the MongoDB $nin opeator to match values
+The following query uses the $nin operator to select documents from the products collection whose price is neither 599 or 799:
+db.products.find({
+    price: {
+        $nin: [699, 799]
+    }
+}, {
+    name: 1,
+    price: 1
+})
+OUTPUT:
+{
+  _id: 2,
+  name: 'xTablet',
+  price: 899
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  price: 899
+{
+  _id: 5,
+  name: 'SmartPhone',
+  price: 599
+}
+-------------------------------------------------------------------------------------------------
+2) Using the MongoDB $nin operator to match values in an array
+The following example uses the $nin operator to select documents where the color array doesn’t have an element that is either "black" or "white":
+db.products.find({
+    color: {
+        $nin: ["black", "white"]
+    }
+}, {
+    name: 1,
+    color: 1
+})
+OUTPUT:
+{
+  _id: 3,
+  name: 'SmartTablet',
+  color: [
+    'blue'
+  ]
+}
+----------------------------------------------------------------------------
+3) Using the MongoDB $nin operator with regular expressions
+The following query uses the $nin operator to find documents where the color array doesn’t have an element that matches /^g+/ and /^w+/ regular expression:
+db.products.find({
+    color: {
+        $nin: [/^g+/, /^w+/]
+    }
+}, {
+    name: 1,
+    color: 1
+})
+{
+  _id: 3,
+  name: 'SmartTablet',
+  color: [
+    'blue'
+  ]
+}
+
