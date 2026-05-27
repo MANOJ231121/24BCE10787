@@ -107,21 +107,29 @@ SELECT manager_id, MIN(salary) AS min_salary FROM Employees WHERE manager_id IS 
 --16.[SUBQUERY] List departments that do not have any 'Analysts'.
 SELECT dept_name FROM Departments WHERE dept_id NOT IN(SELECT dept_id FROM Employees WHERE job_id = 3);
 
-17.
-[AGGREGATION] Find the difference between the highest and lowest salary in the company.
-18.
-[JOIN + ORDER BY] Display employee names and hire dates, sorted by department name (A-Z) and then by salary (High to Low).
-19.
-[HAVING] Identify managers (by ID) who manage more than 2 people.
-20.
-[SUBQUERY] Find the employee(s) with the third-highest salary.
-21.
-[LEFT JOIN] List all job titles and the number of employees currently holding that job.
-22.
-[JOIN + LIKE] Find employees in the 'Finance' department whose names contain the letter 'i'.
-23.
-[MATH + GROUP BY] Calculate the 10% bonus amount for each employee and show the total bonus per department.
-24.
-[SUBQUERY] List the name of the department that pays the highest total salary.
-25.
-[JOINS] Find all employees who report to 'Charlie'.
+--17.[AGGREGATION] Find the difference between the highest and lowest salary in the company.
+  SELECT MAX(salary) - MIN(salary) AS salary_difference FROM Employees;
+
+--18.[JOIN + ORDER BY] Display employee names and hire dates, sorted by department name (A-Z) and then by salary (High to Low).
+SELECT e.name, e.hire_date, d.dept_name, e.salary FROM Employees e JOIN Departments d ON e.dept_id = d.dept_id ORDER BY d.dept_name ASC, e.salary DESC;
+
+--19.[HAVING] Identify managers (by ID) who manage more than 2 people.
+SELECT manager_id, COUNT(*) AS total_employees FROM Employees WHERE manager_id IS NOT NULL GROUP BY manager_id HAVING COUNT(*) > 2;
+
+--20.[SUBQUERY] Find the employee(s) with the third-highest salary.
+SELECT name, salary FROM Employees ORDER BY salary DESC LIMIT 1 OFFSET 2;
+
+--21.[LEFT JOIN] List all job titles and the number of employees currently holding that job.
+SELECT j.job_title, COUNT(e.emp_id) AS total_employees FROM Jobs j LEFT JOIN Employees e ON j.job_id = e.job_id GROUP BY j.job_title;
+
+--22.[JOIN + LIKE] Find employees in the 'Finance' department whose names contain the letter 'i'.
+SELECT e.name FROM Employees e JOIN Departments d ON e.dept_id = d.dept_id WHERE d.dept_name = 'Finance' AND e.name LIKE '%i%';
+
+--23.[MATH + GROUP BY] Calculate the 10% bonus amount for each employee and show the total bonus per department.
+SELECT d.dept_name, SUM(e.salary * 0.10) AS total_bonus FROM Employees e JOIN Departments d ON e.dept_id = d.dept_id GROUP BY d.dept_name;
+
+--24.[SUBQUERY] List the name of the department that pays the highest total salary.
+SELECT d.dept_name FROM Departments d JOIN Employees e ON d.dept_id = e.dept_id GROUP BY d.dept_name ORDER BY SUM(e.salary) DESC LIMIT 1;
+
+--25.[JOINS] Find all employees who report to 'Charlie'.
+SELECT e.name FROM Employees e JOIN Employees m ON e.manager_id = m.emp_id WHERE m.name = 'Charlie';
