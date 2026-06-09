@@ -1,0 +1,91 @@
+Microsoft Windows [Version 10.0.26200.8524]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\bhawa>dir "C:\Program Files\MongoDB\Server\8.3\bin"
+ Volume in drive C is Windows-SSD
+ Volume Serial Number is B0C0-3E4E
+
+ Directory of C:\Program Files\MongoDB\Server\8.3\bin
+
+25-05-2026  19:57    <DIR>          .
+25-05-2026  19:57    <DIR>          ..
+05-05-2026  23:54             1,558 InstallCompass.ps1
+25-05-2026  20:12               539 mongod.cfg
+06-05-2026  00:54        85,504,000 mongod.exe
+06-05-2026  00:54     1,324,814,336 mongod.pdb
+06-05-2026  00:54        56,458,752 mongos.exe
+06-05-2026  00:54       901,844,992 mongos.pdb
+               6 File(s)  2,368,624,177 bytes
+               2 Dir(s)  126,357,409,792 bytes free
+
+C:\Users\bhawa>mongosh --version
+'mongosh' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\bhawa>dir C:\mongosh /s
+ Volume in drive C is Windows-SSD
+ Volume Serial Number is B0C0-3E4E
+File Not Found
+
+C:\Users\bhawa>dir "C:\Program Files" /s | findstr mongosh.exedir "C:\Program Files" /s | findstr mongosh.exe
+FINDSTR: Cannot open /s
+
+C:\Users\bhawa>
+C:\Users\bhawa>
+C:\Users\bhawa>C:\Users\bhawa\AppData\Local\Packages\MicrosoftWindows.Client.Core_cw5n1h2txyewy\TempState\ScreenClip\{BFEFB711-6113-41F4-8B6E-7B37DEA7846E}.png
+
+C:\Users\bhawa>dir C:\mongosh /s
+ Volume in drive C is Windows-SSD
+ Volume Serial Number is B0C0-3E4E
+File Not Found
+
+C:\Users\bhawa>
+Microsoft Windows [Version 10.0.26200.8524]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\bhawa>net stop MongoDB
+System error 5 has occurred.
+
+Access is denied.
+
+
+C:\Users\bhawa>netstat -ano | findstr 27017
+  TCP    127.0.0.1:27017        0.0.0.0:0              LISTENING       5700
+  TCP    127.0.0.1:57779        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:57780        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:57781        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:57782        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:57783        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:57790        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62093        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62094        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62095        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62096        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62097        127.0.0.1:27017        TIME_WAIT       0
+  TCP    127.0.0.1:62105        127.0.0.1:27017        TIME_WAIT       0
+
+C:\Users\bhawa>mkdir C:\data\db0
+
+C:\Users\bhawa>mkdir C:\data\db1
+
+C:\Users\bhawa>mkdir C:\data\db2
+
+C:\Users\bhawa>tasklist /FI "PID eq 5700"
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+mongod.exe                    5700 Services                   0     66,120 K
+
+C:\Users\bhawa>net stop MongoDB
+System error 5 has occurred.
+
+Access is denied.
+
+
+C:\Users\bhawa>sc stop MongoDB
+[SC] OpenService FAILED 5:
+
+Access is denied.
+
+
+C:\Users\bhawa>  
